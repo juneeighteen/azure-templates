@@ -38,7 +38,7 @@
             "collation": "[parameters('collation')]",
             "edition": "[parameters('edition')]",
             "maxSizeBytes": "[parameters('maxSizeBytes')]",
-            "requestedServiceObjectiveId": "[parameters('requestedServiceObjectiveId')]",
+            "requestedServiceObjectiveName": "[parameters('requestedServiceObjectiveName')]",
             "sampleName": "[parameters('sampleName')]"
           },
           "type": "databases"
