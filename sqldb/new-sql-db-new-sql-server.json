@@ -1,0 +1,63 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "administratorLogin": { "type": "string" },
+    "administratorLoginPassword": { "type": "securestring" },
+    "databaseName": { "type": "string" },
+    "serverName": { "type": "string" },
+    "collation": { "type": "string", "defaultValue": "SQL_Latin1_General_CP1_CI_AS" },
+    "edition": { "type": "string", "defaultValue": "Standard"},
+    "requestedServiceObjectiveName": { "type": "string", "defaultValue": "S1" },
+    "location": { "type": "string", "defaultValue": "eastus" },
+    "maxSizeBytes": { "type": "string", "defaultValue": "268435456000" },
+    "version": { "type": "string", "defaultValue": "12.0" },
+    "diagnosticStorageAccountId": { "type": "string", "defaultValue": "" },
+    "diagnosticsTemplate": { "type": "string", "defaultValue": "" },
+    "sampleName": { "type": "string", "defaultValue": "" }
+  },
+  "resources": [
+    {
+      "apiVersion": "2014-04-01-preview",
+      "location": "[parameters('location')]",
+      "name": "[parameters('serverName')]",
+      "properties": {
+        "administratorLogin": "[parameters('administratorLogin')]",
+        "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+        "version": "[parameters('version')]"
+      },
+      "resources": [
+        {
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+          ],
+          "location": "[parameters('location')]",
+          "name": "[parameters('databaseName')]",
+          "properties": {
+            "collation": "[parameters('collation')]",
+            "edition": "[parameters('edition')]",
+            "maxSizeBytes": "[parameters('maxSizeBytes')]",
+            "requestedServiceObjectiveId": "[parameters('requestedServiceObjectiveId')]",
+            "sampleName": "[parameters('sampleName')]"
+          },
+          "type": "databases"
+        },
+        {
+          "apiVersion": "2014-04-01-preview",
+          "dependsOn": [
+            "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+          ],
+          "location": "[parameters('location')]",
+          "name": "AllowAllWindowsAzureIps",
+          "properties": {
+            "endIpAddress": "0.0.0.0",
+            "startIpAddress": "0.0.0.0"
+          },
+          "type": "firewallrules"
+        }
+      ],
+      "type": "Microsoft.Sql/servers"
+    }
+  ]
+}
